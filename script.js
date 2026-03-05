@@ -6,11 +6,14 @@ const descriptionP = document.querySelector('.des');
 const humidity = document.querySelector('.hum');
 const conditions = document.querySelector('.con');
 const windSpeed = document.querySelector('.ws');
+const dataBtn = document.getElementById('check');
+const cityInput = document.getElementById('city');
+const container = document.querySelector('.container');
 
-async function getTemp() {
+async function getTemp(data) {
   try {
     const response = await fetch(
-      'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/almaty?key=FJ3S8FJ4ZJHBBD6CQN5GXKVQD',
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${data}?key=FJ3S8FJ4ZJHBBD6CQN5GXKVQD`,
     );
     const cityData = await response.json();
     const cel = Math.floor((cityData.currentConditions.temp - 32) * (5 / 9));
@@ -22,7 +25,13 @@ async function getTemp() {
     windSpeed.textContent = cityData.currentConditions.windspeed;
     console.log(cityData);
   } catch (error) {
-    console.error(error);
+    container.innerHTML = '';
+    container.innerHTML = `<p><span style="color:red; font-size:2rem;">City with name "${data}" does not exist</span></p>`;
   }
 }
-getTemp();
+getTemp('london');
+
+dataBtn.addEventListener('click', () => {
+  getTemp(cityInput.value);
+  cityInput.value = '';
+});
