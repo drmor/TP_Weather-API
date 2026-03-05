@@ -9,6 +9,7 @@ const windSpeed = document.querySelector('.ws');
 const dataBtn = document.getElementById('check');
 const cityInput = document.getElementById('city');
 const container = document.querySelector('.container');
+const errorContainer = document.querySelector('.error');
 
 async function getTemp(data) {
   try {
@@ -25,13 +26,14 @@ async function getTemp(data) {
     windSpeed.textContent = cityData.currentConditions.windspeed;
     console.log(cityData);
   } catch (error) {
-    container.innerHTML = '';
-    container.innerHTML = `<p><span style="color:red; font-size:2rem;">City with name "${data}" does not exist</span></p>`;
+    container.style.display = 'none';
+    errorContainer.innerHTML = `<p><span style="color:red; font-size:2rem;">City with name "${data}" does not exist</span></p>`;
   }
 }
 getTemp('london');
 
 dataBtn.addEventListener('click', () => {
   getTemp(cityInput.value);
+  container.style.display = 'grid';
   cityInput.value = '';
 });
